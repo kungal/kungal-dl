@@ -76,13 +76,21 @@ python3 -m http.server 8080
 
 ## Deployment
 
-Built as a tiny nginx image ([`Dockerfile`](./Dockerfile)), deployed with
-Dokploy:
+Same model as the other KUN Galgame apps — CI builds a tiny nginx image
+([`Dockerfile`](./Dockerfile)) to GHCR, Dokploy runs
+[`docker-compose.prod.yml`](./docker-compose.prod.yml):
 
-1. Create a Dokploy application from this repository (build type: Dockerfile),
-   container port `80`.
-2. Attach the domains `imoe.uk` and `dl.imoe.uk`.
-3. `dl.imoe.uk` also runs the Cloudflare Worker that fronts the file bucket.
+1. [build.yml](./.github/workflows/build.yml) pushes
+   `ghcr.io/kungal/kungal-dl:{latest,<sha>}` on every push to `main`, then
+   POSTs the `DOKPLOY_WEBHOOK_DL` repository secret (optional — without it,
+   redeploy manually in Dokploy).
+2. In Dokploy create a **Compose** service from this repository pointing at
+   `docker-compose.prod.yml`, then attach the domains **imoe.uk** and
+   **dl.imoe.uk** to the `dl` service, container port `80`.
+3. First deploy only: make the GHCR package **public** (repo → Packages →
+   kungal-dl → Package settings → Change visibility), or add GHCR registry
+   credentials in Dokploy — otherwise the server cannot pull the image.
+4. `dl.imoe.uk` also runs the Cloudflare Worker that fronts the file bucket.
    Keep the Worker on the file paths only — either narrow its routes to
    `dl.imoe.uk/<site>/*` patterns, or make it `fetch(request)` through to the
    origin for any path that is not a file download — so `/`, `/favicon.svg`,
