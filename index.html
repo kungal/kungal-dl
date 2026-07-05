@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>imoe.uk — KUN Galgame File Delivery</title>
+<meta name="description" content="imoe.uk is the file-delivery domain of the KUN Galgame open-source community (kungal.com / moyu.moe). It serves community-uploaded game patch archives as direct attachment downloads and hosts no web content.">
+<link rel="canonical" href="https://imoe.uk/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  /* ——— design tokens (solid colors only — no gradients, by project rule) ——— */
+  :root {
+    --paper: #faf8f5;
+    --panel: #ffffff;
+    --ink: #211d1a;
+    --ink-soft: #6b6259;
+    --ink-faint: #a89e93;
+    --line: #e4ddd3;
+    --accent: #c2456f;        /* community rose */
+    --accent-ink: #a03459;
+    --ok: #3d7a4f;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Songti SC", "Noto Serif CJK SC", serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #191512;
+      --panel: #211c18;
+      --ink: #ece5dc;
+      --ink-soft: #a3988c;
+      --ink-faint: #6e645a;
+      --line: #383026;
+      --accent: #e06a92;
+      --accent-ink: #ef8fae;
+      --ok: #7dbb8f;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scrollbar-gutter: stable; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+  a:hover { border-bottom-color: var(--accent); }
+
+  .wrap { max-width: 41rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  /* ——— masthead ——— */
+  header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; padding-bottom: 1.1rem; border-bottom: 2px solid var(--ink);
+  }
+  .brand { font-family: var(--mono); font-size: .8rem; letter-spacing: .04em; color: var(--ink-soft); }
+  .brand b { color: var(--ink); font-weight: 600; }
+  .brand .dot { color: var(--accent); }
+  .lang { display: flex; gap: .25rem; font-family: var(--mono); font-size: .75rem; }
+  .lang button {
+    background: none; border: 1px solid transparent; color: var(--ink-faint);
+    font: inherit; padding: .15rem .5rem; cursor: pointer; border-radius: 2px;
+  }
+  .lang button:hover { color: var(--ink); }
+  .lang button[aria-pressed="true"] { color: var(--accent-ink); border-color: var(--line); background: var(--panel); }
+
+  /* ——— hero ——— */
+  h1 {
+    font-family: var(--serif); font-weight: 500; font-size: clamp(1.8rem, 5.5vw, 2.6rem);
+    line-height: 1.2; letter-spacing: -.01em; margin: 2.2rem 0 1rem;
+  }
+  h1 em { font-style: italic; color: var(--accent-ink); }
+  .lede { color: var(--ink-soft); max-width: 36rem; }
+
+  /* ——— url specimen ——— */
+  .specimen {
+    margin: 2rem 0; padding: 1rem 1.15rem;
+    border: 1px dashed var(--ink-faint); border-radius: 4px;
+    font-family: var(--mono); font-size: .8rem; line-height: 1.9;
+    color: var(--ink-soft); overflow-x: auto; white-space: nowrap;
+  }
+  .specimen .lbl { color: var(--accent); user-select: none; }
+  .specimen b { color: var(--ink); font-weight: 500; }
+
+  /* ——— sections ——— */
+  section { margin-top: 2.4rem; }
+  h2 {
+    font-family: var(--mono); font-size: .72rem; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: .8rem;
+  }
+  h2::before { content: "§ "; color: var(--ink-faint); }
+  section p + p { margin-top: .6rem; }
+
+  /* ——— fact sheet ——— */
+  dl { border-top: 1px solid var(--line); }
+  dl > div {
+    display: grid; grid-template-columns: 11rem 1fr; gap: 1rem;
+    padding: .65rem 0; border-bottom: 1px solid var(--line);
+  }
+  dt { font-family: var(--mono); font-size: .75rem; color: var(--ink-faint); padding-top: .2rem; }
+  dd { font-size: .95rem; }
+  @media (max-width: 560px) {
+    dl > div { grid-template-columns: 1fr; gap: .1rem; }
+  }
+
+  .yes { color: var(--ok); font-weight: 600; }
+  .no  { color: var(--accent-ink); font-weight: 600; }
+
+  ul.plain { list-style: none; }
+  ul.plain li { padding: .3rem 0; }
+  ul.plain li::before { content: "— "; color: var(--ink-faint); }
+
+  footer {
+    margin-top: 3.5rem; padding-top: 1.1rem; border-top: 2px solid var(--ink);
+    display: flex; flex-wrap: wrap; gap: .4rem 1.4rem;
+    font-family: var(--mono); font-size: .72rem; color: var(--ink-faint);
+  }
+  footer a { color: var(--ink-soft); border-bottom-color: transparent; }
+  footer a:hover { color: var(--accent-ink); }
+
+  /* ——— entrance ——— */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise { animation: rise .55s cubic-bezier(.2,.7,.3,1) both; }
+    .rise:nth-child(2) { animation-delay: .06s; }
+    .rise:nth-child(3) { animation-delay: .12s; }
+    .rise:nth-child(4) { animation-delay: .18s; }
+    .rise:nth-child(5) { animation-delay: .24s; }
+    .rise:nth-child(6) { animation-delay: .30s; }
+    .rise:nth-child(7) { animation-delay: .36s; }
+    .rise:nth-child(8) { animation-delay: .42s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="rise">
+    <div class="brand"><b>imoe.uk</b> <span class="dot">·</span> <span data-i18n="brand">KUN Galgame file delivery</span></div>
+    <nav class="lang" aria-label="Language">
+      <button type="button" id="btn-en" aria-pressed="true">EN</button>
+      <button type="button" id="btn-zh" aria-pressed="false">中文</button>
+    </nav>
+  </header>
+
+  <h1 class="rise"><span data-i18n="h1.a">This domain delivers </span><em data-i18n="h1.b">files</em><span data-i18n="h1.c">, not pages.</span></h1>
+  <p class="lede rise" data-i18n="lede">
+    imoe.uk is the download domain of the KUN Galgame community — an open-source,
+    non-commercial visual-novel community. Every URL under dl.imoe.uk is a direct,
+    attachment-only download of a community-uploaded game patch archive. There is no
+    other web content here: no forms, no logins, no scripts, no ads, no tracking.
+  </p>
+
+  <div class="specimen rise" aria-label="URL anatomy">
+    <span class="lbl" data-i18n="spec.label">the only kind of URL served here</span><br>
+    https://<b>dl.imoe.uk</b>/{site}/{uuid}<b>.zip|.rar|.7z</b><br>
+    <span class="lbl">→</span> Content-Disposition: <b>attachment</b>; filename*=UTF-8''…
+  </div>
+
+  <section class="rise">
+    <h2 data-i18n="what.h">What it serves</h2>
+    <p data-i18n="what.p1">
+      Fan-made translation patches and modification archives for PC visual novels
+      (galgame), uploaded by registered members of our community sites and served
+      verbatim as compressed archives. Files download directly — this domain never
+      asks the visitor to do anything.
+    </p>
+    <p data-i18n="what.p2">
+      Uploading requires an authenticated account on one of the community sites
+      below, so every file is attributable to an accountable user. Reported or
+      flagged files are taken down promptly.
+    </p>
+  </section>
+
+  <section class="rise">
+    <h2 data-i18n="fact.h">Fact sheet</h2>
+    <dl>
+      <div><dt data-i18n="fact.operator">operated by</dt><dd data-i18n="fact.operator.v">KUN Galgame open-source community</dd></div>
+      <div><dt data-i18n="fact.serves">serves</dt><dd><a href="https://www.kungal.com" rel="noopener">kungal.com</a> · <a href="https://www.moyu.moe" rel="noopener">moyu.moe</a></dd></div>
+      <div><dt data-i18n="fact.content">content type</dt><dd data-i18n="fact.content.v">user-uploaded archive files (.zip / .rar / .7z), attachment-only</dd></div>
+      <div><dt data-i18n="fact.pages">web pages</dt><dd><span class="no" data-i18n="fact.none">none</span> <span data-i18n="fact.pages.v">— this notice is the only page on the domain</span></dd></div>
+      <div><dt data-i18n="fact.tracking">scripts · ads · tracking</dt><dd><span class="no" data-i18n="fact.none2">none</span> <span data-i18n="fact.tracking.v">— this page makes zero third-party requests</span></dd></div>
+      <div><dt data-i18n="fact.uploads">anonymous uploads</dt><dd><span class="no" data-i18n="fact.notpossible">not possible</span> <span data-i18n="fact.uploads.v">— authenticated community accounts only</span></dd></div>
+      <div><dt data-i18n="fact.source">source code</dt><dd><a href="https://github.com/kungal/kungal-dl" rel="noopener">github.com/kungal/kungal-dl</a> <span class="yes" data-i18n="fact.open">(open source)</span></dd></div>
+    </dl>
+  </section>
+
+  <section class="rise">
+    <h2 data-i18n="who.h">Who we are</h2>
+    <p data-i18n="who.p1">
+      KUN Galgame builds free, open-source websites for the Chinese visual-novel
+      community — a forum, a patch-resource site, a wiki and the shared
+      infrastructure behind them. Everything is developed in the open on GitHub.
+    </p>
+    <ul class="plain">
+      <li><a href="https://github.com/kungal" rel="noopener">github.com/kungal</a> — <span data-i18n="who.org1">UI library, editor, tooling</span></li>
+      <li><a href="https://github.com/KunMoe" rel="noopener">github.com/KunMoe</a> — <span data-i18n="who.org2">forum & patch-site source code</span></li>
+      <li><a href="https://t.me/kungalgame" rel="noopener">t.me/kungalgame</a> — <span data-i18n="who.tg">community Telegram group</span></li>
+    </ul>
+  </section>
+
+  <section class="rise">
+    <h2 data-i18n="abuse.h">Report a file</h2>
+    <p>
+      <span data-i18n="abuse.p1">If a file distributed through this domain looks harmful or infringing, tell us and we will act on it promptly: open an issue at </span><a href="https://github.com/kungal/kungal-dl/issues" rel="noopener">kungal/kungal-dl</a><span data-i18n="abuse.p2"> or reach the moderators in the </span><a href="https://t.me/kungalgame" rel="noopener" data-i18n="abuse.tg">Telegram group</a><span data-i18n="abuse.p3">. Machine-readable contact details are published in </span><a href="/.well-known/security.txt">security.txt</a><span data-i18n="abuse.p4">.</span>
+    </p>
+  </section>
+
+  <footer class="rise">
+    <span>© KUN Galgame</span>
+    <a href="https://www.kungal.com" rel="noopener">kungal.com</a>
+    <a href="https://www.moyu.moe" rel="noopener">moyu.moe</a>
+    <a href="https://github.com/kungal/kungal-dl" rel="noopener">source</a>
+    <a href="https://t.me/kungalgame" rel="noopener">telegram</a>
+  </footer>
+
+</div>
+
+<script>
+  // Tiny dictionary i18n, textContent-only (no innerHTML anywhere). English lives
+  // in the static HTML so crawlers and no-JS visitors see it; selecting 中文 swaps
+  // the text of every [data-i18n] node. Preference persists in localStorage only —
+  // no cookies, no network requests.
+  const zh = {
+    'brand': '鲲 Galgame 文件分发',
+    'h1.a': '这个域名只分发',
+    'h1.b': '文件',
+    'h1.c': '，没有网页。',
+    'lede': 'imoe.uk 是鲲 Galgame 社区（一个开源、非商业的 Galgame 社区）的下载域。dl.imoe.uk 下的每一个 URL 都是社区用户上传的游戏补丁压缩包的直接附件下载。这里没有任何其他网页内容：没有表单、没有登录、没有脚本、没有广告、没有跟踪。',
+    'spec.label': '本域名唯一的一种 URL',
+    'what.h': '分发什么',
+    'what.p1': '由社区站点注册用户上传的 PC 端视觉小说（galgame）汉化补丁与修改档，以压缩包原样分发。文件直接下载——本域名从不要求访问者进行任何操作。',
+    'what.p2': '上传必须持有下方社区站点的认证账号，因此每个文件都可追溯到具体用户。被举报或被标记的文件会被及时下架。',
+    'fact.h': '事实清单',
+    'fact.operator': '运营方',
+    'fact.operator.v': '鲲 Galgame 开源社区',
+    'fact.serves': '服务站点',
+    'fact.content': '内容类型',
+    'fact.content.v': '用户上传的压缩包（.zip / .rar / .7z），仅附件下载',
+    'fact.pages': '网页',
+    'fact.none': '无',
+    'fact.pages.v': '—— 本说明页是该域名下唯一的网页',
+    'fact.tracking': '脚本 · 广告 · 跟踪',
+    'fact.none2': '无',
+    'fact.tracking.v': '—— 本页面零第三方请求',
+    'fact.uploads': '匿名上传',
+    'fact.notpossible': '不可能',
+    'fact.uploads.v': '—— 仅限社区认证账号',
+    'fact.source': '源代码',
+    'fact.open': '（开源）',
+    'who.h': '我们是谁',
+    'who.p1': '鲲 Galgame 为中文视觉小说社区构建免费、开源的网站——论坛、补丁资源站、wiki 以及它们背后的共享基础设施。所有开发都在 GitHub 上公开进行。',
+    'who.org1': 'UI 组件库、编辑器与工具链',
+    'who.org2': '论坛与补丁站源代码',
+    'who.tg': '社区 Telegram 群组',
+    'abuse.h': '举报文件',
+    'abuse.p1': '如果经由本域名分发的某个文件涉嫌有害或侵权，请告诉我们，我们会及时处理：在 ',
+    'abuse.p2': ' 提交 issue，或在 ',
+    'abuse.tg': 'Telegram 群组',
+    'abuse.p3': ' 联系管理员。机器可读的联系方式见 ',
+    'abuse.p4': '。',
+    '_title': 'imoe.uk — 鲲 Galgame 文件分发',
+  }
+
+  const en = { '_title': document.title }
+  document.querySelectorAll('[data-i18n]').forEach((el) => { en[el.dataset.i18n] = el.textContent })
+
+  const apply = (lang) => {
+    const dict = lang === 'zh' ? zh : en
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const s = dict[el.dataset.i18n]
+      if (s !== undefined) el.textContent = s
+    })
+    document.title = dict['_title']
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en'
+    document.getElementById('btn-en').setAttribute('aria-pressed', String(lang !== 'zh'))
+    document.getElementById('btn-zh').setAttribute('aria-pressed', String(lang === 'zh'))
+    try { localStorage.setItem('lang', lang) } catch {}
+  }
+
+  document.getElementById('btn-en').addEventListener('click', () => apply('en'))
+  document.getElementById('btn-zh').addEventListener('click', () => apply('zh'))
+
+  let saved = null
+  try { saved = localStorage.getItem('lang') } catch {}
+  if (saved === 'zh') apply('zh')
+</script>
+</body>
+</html>
