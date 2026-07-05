@@ -3,4 +3,3 @@ Contact: https://t.me/kungalgame
 Expires: 2027-07-01T00:00:00.000Z
 Preferred-Languages: en, zh
 Canonical: https://imoe.uk/.well-known/security.txt
-Canonical: https://dl.imoe.uk/.well-known/security.txt
